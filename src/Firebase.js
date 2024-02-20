@@ -13,6 +13,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const Storage = getStorage(app);
+export const Storage = getStorage(app, "gs://coludphoto.appspot.com");
 export const db = getFirestore(app);
 
