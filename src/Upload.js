@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Storage } from './Firebase';
-import {ref, uploadBytes , listAll, getDownloadURL} from 'firebase/storage';
+import {ref, uploadBytes , listAll, getDownloadURL, deleteObject} from 'firebase/storage';
 
 function UploadImage() {
   const [Myimage , setMyImage] = useState(null);
@@ -18,8 +18,9 @@ function UploadImage() {
       
     }
   }
-  const listimage= () => {
+  const listimage = () => {
     const imageRef = ref(Storage,`image`)
+    setImageList([]);
     listAll(imageRef).then((res) =>{
       res.items.forEach((itemRef) => {
         console.log(itemRef)
@@ -33,7 +34,19 @@ function UploadImage() {
     })
 
   }
+  
+const handeldelete = (url) =>{
+  console.log(url);
 
+  deleteObject(ref(Storage, url)).then(() =>{
+    alert("file succefully delete")
+    listimage();
+  }).catch((error) =>{
+    alert('somting went wrong');
+  })
+
+
+}
 
 
   return (
@@ -42,7 +55,12 @@ function UploadImage() {
       <button onClick={upload}> Upload Image</button>
       <button onClick={listimage}>List Image</button>
       {imageList.map((url, index) => {
-       return  <img key={index} src={url} alt='' />
+       return (
+        <div key={index}> 
+          <img src={url} alt='' />
+          <button onClick={() => handeldelete(url)}> Delete</button>
+        </div>
+       ) 
       })}
 
     </div>
